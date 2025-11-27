@@ -1,0 +1,14 @@
+{
+  "name": "db",
+  "type": "module",
+  "main": "src/client.ts",
+  "exports": {
+    "./client": "./src/client.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "6.3.1"
+  },
+  "devDependencies": {
+    "prisma": "6.3.1"
+  }
+}
