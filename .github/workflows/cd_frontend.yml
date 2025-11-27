@@ -1,0 +1,22 @@
+name: Deploy the backend 
+on: 
+    push: 
+       branches:  [main]
+    jobs: 
+    build:
+       steps: 
+          - name:  checkout the code
+            uses:  docker/login-action@v2
+            with: 
+               username: ${{secrets.DOCKERHUB_USERNAME}}
+               password: ${{secrets.DOCKERHUB_TOKEN}}
+
+          - name: build and push
+            uses: docker/build-push-action@v4
+            with: 
+                context:
+                file: ./docker/Dockerfile.frontend
+                build-args:
+                  - DATABASE_URL=${{ secrets.DOCKERHUB_URL }}
+                push:  true  
+                tages: pankaj/todo-app-websocket:${{ github.sha}}    
