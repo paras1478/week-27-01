@@ -1,34 +1,26 @@
 {
-  "services": {
-    "mongo": {
-      "image": "mongo:5.0",
-      "volumes": [
-        "dbdata:/data/db"
-      ]
-    },
-    "app": {
-      "build": {
-        "context": "./",
-        "dockerfile": "Dockerfile",
-        "target": "development"
-      },
-      "environment": [
-        "MONGO_URL=mongodb://mongo:27017/p5js-web-editor"
-      ],
-      "volumes": [
-        "./:/usr/src/app",
-        "/usr/src/app/node_modules"
-      ],
-      "ports": [
-        "8000:8000",
-        "8002:8002"
-      ],
-      "depends_on": [
-        "mongo"
+  "jobs": {
+    "build": {
+      "steps": [
+        {
+          "name": "Docker login",
+          "uses": "docker/login-action@v2",
+          "with": {
+            "username": "${{ secrets.DOCKERHUB_USERNAME }}",
+            "password": "${{ secrets.DOCKERHUB_TOKEN }}"
+          }
+        },
+        {
+          "name": "Build and push",
+          "uses": "docker/build-push-action@v4",
+          "with": {
+            "context": "./",
+            "file": "./docker/Dockerfile.backend",
+            "push": true,
+            "tags": "100xdevs/todo-app-backend:${{ github.sha }}"
+          }
+        }
       ]
     }
-  },
-  "volumes": {
-    "dbdata": null
   }
 }
